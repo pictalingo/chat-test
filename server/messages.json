@@ -1,0 +1,55 @@
+[
+    {
+        "roomId": 10,
+        "fromName": "from name",
+        "fromNumber": "054-129312",
+        "body": [
+            {
+                "receivedAt": "2021-08-30 18:09:35",
+                "body": "lorem ipsum?",
+                "direction": "incoming"
+            },
+            {
+                "receivedAt": "2021-08-31 12:01:20",
+                "body": "lorem ipsum!",
+                "direction": "outgoing"
+            }
+        ]
+    },
+    {
+        "roomId": 11,
+        "fromName": "from name2",
+        "fromNumber": "054-122222",
+        "body": [
+            {
+                "receivedAt": "2021-08-30 18:09:35",
+                "body": "lorem ipsum lorem?",
+                "direction": "incoming"
+            }
+        ]
+    },
+    {
+        "roomId": 5,
+        "fromName": "from name2",
+        "fromNumber": "054-122222",
+        "body": [
+            {
+                "receivedAt": "2021-08-30 18:09:35",
+                "body": "lorem ipsum lorem?",
+                "direction": "incoming"
+            }
+        ]
+    },
+    {
+        "roomId": 6,
+        "fromName": "from name2",
+        "fromNumber": "054-122222",
+        "body": [
+            {
+                "receivedAt": "2021-08-30 18:09:35",
+                "body": "lorem ipsum lorem?",
+                "direction": "incoming"
+            }
+        ]
+    }
+]
