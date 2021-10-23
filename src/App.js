@@ -5,7 +5,6 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link,
     useRouteMatch,
     useParams
 } from "react-router-dom";
@@ -15,31 +14,17 @@ import './App.css';
 
 function App() {
 
+    const [selectedRoom, setSelectedRoom] = React.useState(null);
     const [data, setData] = React.useState([]);
 
     React.useEffect(() => {
         fetch("/api/messages")
             .then((res) => res.json())
             .then((data) => {
+                setSelectedRoom(+localStorage.getItem('selectedRoomId'));
                 setData(data)
             });
     }, []);
-
-    const [messages, setMessages] = React.useState({
-        data: '',
-        loading: true
-    });
-
-    const [name, setName] = React.useState('')
-
-    const getRoomMessages = async (e, roomId) => {
-        console.log(roomId);
-        const data = await axios.get('http://localhost:3001/api/chat/' + roomId)
-        setMessages({
-            data: data,
-            loading: false
-        })
-    }
 
     return (
         <Router>
@@ -47,14 +32,23 @@ function App() {
             <div className="chat">
                 <section className="navigable">
                     <Router>
+                        <div className="logo-holder">
+                            <a href="/root/home">
+                                <img src="//app.workiz.com/_assets/img/workizlogo370.png" alt=""/>
+                            </a>
+                            <button>stop</button>
+                        </div>
                         <ul id="big-menu" className="big-menu">
                             {data.map(room => (
-                                <li className="undefined jobLink">
-                                    <button onClick={(e) => {
-                                        getRoomMessages(e, room.roomId);
-                                    }} className=" " title="Select room">
-                                        {room.roomId}
-                                    </button>
+                                <li className={"jobLink" + (selectedRoom === room.roomId ? ' selected' : '')}
+                                    key={'room-id-' + room.roomId}>
+                                    <a href={"/room/" + room.roomId}>
+                                        <span className="nameCircle">
+                                            <span className="_smalMenuMsgFirst">{room.fromName.charAt(0)}</span>
+                                        </span>
+                                        <strong>{room.fromName}</strong><br/>
+                                        <small>{room.fromNumber}</small>
+                                    </a>
                                 </li>
                             ))}
                         </ul>
@@ -65,8 +59,8 @@ function App() {
                         <Route exact path="/">
                             <MainChat/>
                         </Route>
-                        <Route path="/topics">
-                            <Topics/>
+                        <Route path="/room">
+                            <Rooms/>
                         </Route>
                     </Switch>
                 </main>
@@ -77,51 +71,77 @@ function App() {
 }
 
 function MainChat() {
+
     return (
-        <div>
-            <h2>Home</h2>
+        <div className="choose-room">
+            <h5>Please select chat to show messages</h5>
         </div>
     );
 }
 
-function Topics() {
+function Rooms() {
     let match = useRouteMatch();
 
     return (
-        <div>
-            <h2>Topics</h2>
-
-            <ul>
-                <li>
-                    <Link to={`${match.url}/components`}>Components</Link>
-                </li>
-                <li>
-                    <Link to={`${match.url}/props-v-state`}>
-                        Props v. State
-                    </Link>
-                </li>
-            </ul>
-
-            {/* The Topics page has its own <Switch> with more routes
-          that build on the /topics URL path. You can think of the
-          2nd <Route> here as an "index" page for all topics, or
-          the page that is shown when no topic is selected */}
-            <Switch>
-                <Route path={`${match.path}/:topicId`}>
-                    <Topic/>
-                </Route>
-                <Route path={match.path}>
-                    <h3>Please select a topic.</h3>
-                </Route>
-            </Switch>
-        </div>
+        <Switch>
+            <Route path={`${match.path}/:roomId`}>
+                <Room/>
+            </Route>
+        </Switch>
     );
 }
 
-function Topic() {
-    let {topicId} = useParams();
-    return <h3>Requested topic ID: {topicId}</h3>;
+function Room() {
+
+    let {roomId} = useParams();
+    localStorage.setItem('selectedRoomId', roomId);
+
+    return (
+        <Router>
+            <Messages roomId={roomId}/>
+        </Router>
+    );
 }
 
+
+class Messages extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            time: null,
+            roomId: props.roomId,
+            text: localStorage.getItem('roomMessages' + props.roomId) || ''
+        };
+    }
+
+    componentDidMount() {
+        this.intervalID = setInterval(() => this.getMessages(), 5000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.intervalID);
+    }
+
+    getMessages() {
+
+        axios.get('/api/chat/' + this.state.roomId).then((res) => {
+            let text = this.state.text.toString() + `<div class="chat-message ${res.data.direction.toString()}">${res.data.body.toString()}</div>`;
+            localStorage.setItem('roomMessages' + this.state.roomId, text.toString());
+            this.setState({text});
+        });
+
+        let time = new Date().toTimeString();
+        this.setState({time});
+    }
+
+    render() {
+        return (
+            <div className="chat-wrapper" dangerouslySetInnerHTML={{__html: this.state.text}}></div>
+        );
+    }
+
+}
 
 export default App;

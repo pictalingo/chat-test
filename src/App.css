@@ -3,6 +3,103 @@ html, body, #root, .chat {
     height: 100%;
 }
 
+body {
+    background: rgb(247, 247, 247);
+}
+
+main {
+    width: 500px;
+    overflow: scroll;
+    margin: 20px;
+}
+
+#big-menu li {
+    text-align: left;
+    border-bottom: 1px solid #DDD;
+}
+
+#big-menu li.selected {
+    border-left: 4px solid #50d58c;
+    padding-left: 11px;
+}
+
+.navigable, .choose-room {
+    transform: rotate(180deg);
+}
+
+.navigable {
+    background-color: rgb(247, 247, 247);
+    border-left: 1px solid #DDD;
+    border-right: 1px solid #DDD;
+}
+
+.choose-room {
+    padding: 10px;
+}
+
+.nameCircle {
+    font-size: 21px;
+    color: #000;
+    margin-right: 10px;
+    display: inline-block;
+    float: left;
+}
+
+._smalMenuMsgFirst {
+    background: rgb(62, 75, 81);
+    color: white;
+}
+
 .chat {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+    height: calc(100vh - 50px);
+    min-height: 100%;
+    margin: 0 auto;
+    overflow-y: scroll;
+    background-color: #fff;
+    transform: rotate(180deg);
+    direction: rtl;
+    border-right: 1px solid #DDD;
+}
+
+.chat-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+}
+
+.chat-message {
+    font-size: 14px;
+    padding: 8px 18px;
+    border: 1px solid #000;
+    border-radius: 25px;
+    color: #000;
+    max-width: 50%;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    position: relative;
+    margin: 15px 0;
+    word-break: break-all;
+    transform: rotate(180deg);
+    direction: ltr;
+}
+
+.outgoing {
+    padding: 10px 20px;
+    border: none;
+    color: #404040;
+    margin-left: auto;
+    background-color: rgb(255, 212, 0);
 }
