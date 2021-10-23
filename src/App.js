@@ -36,7 +36,6 @@ function App() {
                             <a href="/root/home">
                                 <img src="//app.workiz.com/_assets/img/workizlogo370.png" alt=""/>
                             </a>
-                            <button>stop</button>
                         </div>
                         <ul id="big-menu" className="big-menu">
                             {data.map(room => (
